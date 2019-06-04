@@ -465,37 +465,14 @@ bool readSrcFile(char *filename,uint8 *&img,int &width,int &height, int &expande
 		system(str);
 	}
 
-	int q = find_pos_of_extension(filename);
-	if(!strcmp(&filename[q],".ppm")) 
-	{
-		// Already a .ppm file. Just copy. 
-		sprintf(str,"copy %s tmp.ppm \n", filename);
-		printf("Copying source file to tmp.ppm\n", filename);
-	}
-	else
-	{
-		// Converting from other format to .ppm 
-		// 
-		// Use your favorite command line image converter program,
-		// for instance Image Magick. Just make sure the syntax can
-		// be written as below:
-		// 
-		// C:\magick convert source.jpg dest.ppm
-		//
-		sprintf(str,"magick convert %s tmp.ppm\n", filename);
-		printf("Converting source file from %s to .ppm\n", filename);
-	}
-	// Execute system call
-	system(str);
 
 	int bitrate=8;
 	if(format==ETC2PACKAGE_RG_NO_MIPMAPS)
 		bitrate=16;
-	if(fReadPPM("tmp.ppm",w1,h1,img,bitrate))
+	if(fReadPPM(filename,w1,h1,img,bitrate))
 	{
 		width=w1;
 		height=h1;
-		system("del tmp.ppm");
 
 		// Width must be divisible by 4 and height must be
 		// divisible by 4. Otherwise, we will expand the image
